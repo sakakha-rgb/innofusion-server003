@@ -1,0 +1,44 @@
+{
+  "id": "com.innofusion.premiere",
+  "name": "iNNO FUSION",
+  "version": "1.0.0",
+  "host": [
+    {
+      "app": "PPRO",
+      "minVersion": "15.0",
+      "maxVersion": "99.9"
+    }
+  ],
+  "type": "panel",
+  "uiEntry": {
+    "type": "panel",
+    "path": "src/index.html"
+  },
+  "icons": {
+    "default": {
+      "normal": "icons/iconNormal.png",
+      "hover": "icons/iconRollover.png",
+      "disabled": "icons/iconDisabled.png"
+    },
+    "dark": {
+      "normal": "icons/iconDarkNormal.png"
+    }
+  },
+  "permissions": {
+    "allowCodeGenerationFromStrings": true,
+    "launchProcess": {
+      "schemes": ["https"],
+      "domains": ["innofusion-api.com", "localhost"]
+    },
+    "network": {
+      "domains": ["innofusion-api.com", "localhost"]
+    },
+    "fileSystem": {
+      "read": ["${plugin}/mogrt_library/", "${temp}"],
+      "write": ["${plugin}/data/", "${temp}"]
+    }
+  },
+  "featureFlags": {
+    "enableSWCSupport": true
+  }
+}

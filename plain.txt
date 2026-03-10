@@ -1,8 +1,41 @@
-innofusion-server/
-├── api/
-│   ├── index.js          # মূল API
-│   ├── generate.js       # License generate
-│   ├── activate.js       # Activation
-│   └── validate.js       # Validation
-├── package.json
-└── vercel.json           # Delete this file!
+iNNO-FUSION/
+├── manifest.json                 # UXP ম্যানিফেস্ট
+├── package.json                  # Node dependencies
+├── .debug                        # ডিবাগিং কনফিগ
+├── icons/
+│   ├── iconNormal.png           # 23x23
+│   ├── iconRollover.png         # 23x23
+│   ├── iconDisabled.png         # 23x23
+│   └── iconDarkNormal.png       # Dark mode
+├── src/
+│   ├── index.html               # মূল UI
+│   ├── index.js                 # Entry point
+│   ├── styles.css               # স্টাইলিং
+│   ├── components/
+│   │   ├── AuthPanel.js         # লাইসেন্স UI
+│   │   ├── LibraryGrid.js       # MOGRT গ্রিড
+│   │   ├── PreviewPanel.js      # প্রিভিউ প্যানেল
+│   │   ├── SearchBar.js         # সার্চ কম্পোনেন্ট
+│   │   └── Sidebar.js           # ক্যাটেগরি সাইডবার
+│   ├── core/
+│   │   ├── LicenseManager.js    # লাইসেন্স সিস্টেম
+│   │   ├── MogrtScanner.js      # MOGRT স্ক্যানার
+│   │   ├── Database.js          # লোকাল ডাটাবেস
+│   │   ├── PreviewGenerator.js  # থাম্বনেইল জেনারেটর
+│   │   └── PremiereBridge.js    # Premiere-এর সাথে কানেকশন
+│   ├── utils/
+│   │   ├── crypto.js            # এনক্রিপশন
+│   │   ├── validators.js        # ভ্যালিডেশন
+│   │   └── helpers.js           # হেল্পার ফাংশন
+│   └── assets/
+│       ├── logo.svg
+│       └── loading.gif
+├── server/                       # লাইসেন্স সার্ভার (আলাদা)
+│   ├── server.js
+│   ├── models/
+│   └── routes/
+└── mogrt_library/               # আপনার MOGRT ফোল্ডার
+    ├── Lower Thirds/
+    ├── Titles/
+    ├── Transitions/
+    └── Social Media/

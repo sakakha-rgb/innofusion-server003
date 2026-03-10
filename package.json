@@ -1,13 +1,13 @@
 {
-  "name": "innofusion-server",
+  "name": "innofusion-license-server",
   "version": "1.0.0",
-  "type": "module",
   "scripts": {
     "start": "node api/index.js"
   },
   "dependencies": {
     "express": "^4.18.2",
-    "mongodb": "^6.3.0",
-    "cors": "^2.8.5"
+    "mongoose": "^8.0.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1"
   }
 }
