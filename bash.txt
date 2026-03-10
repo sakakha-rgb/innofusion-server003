@@ -1,0 +1,13 @@
+# Terminal/Git Bash
+cd innofusion-server003
+
+# Delete old files
+rm README.md
+
+# Create new files (copy-paste above code)
+# Save: package.json, vercel.json, api/index.js
+
+# Push
+git add .
+git commit -m "Fix: Express server with all endpoints"
+git push origin main
