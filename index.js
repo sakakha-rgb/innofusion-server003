@@ -8,13 +8,12 @@ app.use(express.json());
 
 const uri = process.env.MONGODB_URI;
 
-// ========== ROUTES ==========
-
 // GET / - Status
 app.get('/', (req, res) => {
   res.json({ 
     status: "iNNO FUSION API",
     version: "1.0.0",
+    endpoints: ["/activate", "/validate", "/generate"],
     timestamp: new Date().toISOString()
   });
 });
@@ -47,7 +46,6 @@ app.post('/activate', async (req, res) => {
       });
     }
     
-    // Check expiry
     if (new Date() > new Date(license.expiresAt)) {
       return res.status(400).json({ 
         success: false, 
@@ -56,7 +54,6 @@ app.post('/activate', async (req, res) => {
       });
     }
     
-    // Check existing activation
     const existing = license.activations?.find(a => a.hardwareId === hardware_id);
     if (existing) {
       return res.json({
@@ -67,7 +64,6 @@ app.post('/activate', async (req, res) => {
       });
     }
     
-    // Max 2 devices
     if (license.activations?.length >= 2) {
       return res.status(403).json({
         success: false,
@@ -76,7 +72,6 @@ app.post('/activate', async (req, res) => {
       });
     }
     
-    // Add activation
     await licenses.updateOne(
       { key: license_key },
       { 
@@ -98,7 +93,6 @@ app.post('/activate', async (req, res) => {
     });
     
   } catch (error) {
-    console.error('Activation error:', error);
     res.status(500).json({ success: false, error: 'Server error' });
   } finally {
     await client.close();
@@ -160,7 +154,6 @@ app.post('/generate', async (req, res) => {
       let key;
       let exists = true;
       
-      // Ensure unique key
       while (exists) {
         key = generateKey();
         exists = await licenses.findOne({ key });
@@ -190,11 +183,9 @@ app.post('/generate', async (req, res) => {
   }
 });
 
-// Export for Vercel
 export default app;
 
-// Local dev
 if (!process.env.VERCEL) {
   const PORT = process.env.PORT || 3000;
-  app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+  app.listen(PORT, () => console.log(`Server on port ${PORT}`));
 }
