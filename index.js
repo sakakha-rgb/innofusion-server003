@@ -8,16 +8,15 @@ app.use(express.json());
 
 const uri = process.env.MONGODB_URI;
 
-// Health check
 app.get('/', (req, res) => {
   res.json({ 
     status: "iNNO FUSION API",
     version: "1.0.0",
+    endpoints: ["/generate", "/activate", "/validate"],
     timestamp: new Date().toISOString()
   });
 });
 
-// Generate license
 app.post('/generate', async (req, res) => {
   const { secret, count = 1, days = 365 } = req.body;
   
@@ -76,15 +75,11 @@ app.post('/generate', async (req, res) => {
   }
 });
 
-// Activate license
 app.post('/activate', async (req, res) => {
   const { license_key, hardware_id } = req.body;
   
   if (!license_key || !hardware_id) {
-    return res.status(400).json({ 
-      success: false, 
-      error: 'Missing fields' 
-    });
+    return res.status(400).json({ success: false, error: 'Missing fields' });
   }
 
   const client = new MongoClient(uri);
@@ -97,51 +92,28 @@ app.post('/activate', async (req, res) => {
     const license = await licenses.findOne({ key: license_key });
     
     if (!license) {
-      return res.status(400).json({ 
-        success: false, 
-        error: 'Invalid key' 
-      });
+      return res.status(400).json({ success: false, error: 'Invalid key' });
     }
     
     if (new Date() > new Date(license.expiresAt)) {
-      return res.status(400).json({ 
-        success: false, 
-        error: 'Expired' 
-      });
+      return res.status(400).json({ success: false, error: 'Expired' });
     }
     
     const existing = license.activations?.find(a => a.hardwareId === hardware_id);
     if (existing) {
-      return res.json({
-        success: true,
-        reactivated: true,
-        expires_at: license.expiresAt
-      });
+      return res.json({ success: true, reactivated: true, expires_at: license.expiresAt });
     }
     
     if (license.activations?.length >= 2) {
-      return res.status(403).json({
-        success: false,
-        error: 'Max devices'
-      });
+      return res.status(403).json({ success: false, error: 'Max devices' });
     }
     
     await licenses.updateOne(
       { key: license_key },
-      { 
-        $push: { 
-          activations: { 
-            hardwareId: hardware_id, 
-            activatedAt: new Date()
-          } 
-        }
-      }
+      { $push: { activations: { hardwareId: hardware_id, activatedAt: new Date() } } }
     );
     
-    res.json({
-      success: true,
-      expires_at: license.expiresAt
-    });
+    res.json({ success: true, expires_at: license.expiresAt });
     
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -150,7 +122,6 @@ app.post('/activate', async (req, res) => {
   }
 });
 
-// Validate license
 app.post('/validate', async (req, res) => {
   const { license_key, hardware_id } = req.body;
   const client = new MongoClient(uri);
